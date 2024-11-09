@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagrama de Caso de Uso - Sistema Acadêmico</title>
+  <!-- Link para o CSS -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Script do GoJS -->
+  <script src="https://unpkg.com/gojs/release/go.js"></script>
+</head>
+<body>
+  <div class="diagram-container">
+    <h1>Diagrama de Caso de Uso - Sistema Acadêmico</h1>
+    <div id="myDiagramDiv" class="diagram"></div>
+  </div>
+
+  <!-- Script para configurar o diagrama GoJS -->
+  <script>
+    function init() {
+      const $ = go.GraphObject.make;
+
+      const diagram = $(go.Diagram, "myDiagramDiv", {
+        "undoManager.isEnabled": true,
+        layout: $(go.LayeredDigraphLayout, { direction: 0, layerSpacing: 100 }),
+        padding: 20,
+        contentAlignment: go.Spot.Center,
+        autoScale: go.Diagram.UniformToFill
+      });
+
+      // Definindo o estilo dos nós
+      diagram.nodeTemplate = $(
+        go.Node,
+        "Vertical",
+        $(go.Panel, "Auto",
+          $(go.Shape, "Ellipse", {
+              fill: "#4ecca3",
+              stroke: "#333",
+              strokeWidth: 2,
+              width: 100,
+              height: 100
+            },
+            new go.Binding("fill", "color")
+          ),
+          $(go.TextBlock, {
+              font: "bold 30px Arial",
+              stroke: "#ffffff",
+              textAlign: "center"
+            },
+            new go.Binding("text", "icon")
+          )
+        ),
+        $(go.TextBlock, {
+            margin: 8,
+            font: "15px Arial",
+            stroke: "#ffffff",
+            textAlign: "center"
+          },
+          new go.Binding("text", "label")
+        )
+      );
+
+      // Definindo o estilo das conexões
+      diagram.linkTemplate = $(
+        go.Link,
+        {
+          routing: go.Link.Orthogonal,
+          corner: 10,
+          relinkableFrom: true,
+          relinkableTo: true,
+        },
+        $(go.Shape, {
+          stroke: "#ffffff",
+          strokeWidth: 2.5
+        }),
+        $(go.TextBlock, {
+            font: "italic 14px Arial",
+            stroke: "#ffffff",
+            segmentOffset: new go.Point(0, -10)
+          },
+          new go.Binding("text", "relationship")
+        )
+      );
+
+      // Dados dos nós e conexões com ícones
+      diagram.model = new go.GraphLinksModel(
+        [
+          { key: "Aluno", icon: "👤", label: "Aluno", color: "#6c63ff" },
+          { key: "Comprar Bilhete de Estacionamento", icon: "🎫", label: "Comprar Bilhete de Estacionamento" },
+          { key: "Pagamento com Cartão de Crédito", icon: "💳", label: "Pagamento com Cartão de Crédito" },
+          { key: "Pagamento com Boleto", icon: "💵", label: "Pagamento com Boleto" },
+          { key: "Obter Cronograma de Disciplinas", icon: "📅", label: "Obter Cronograma de Disciplinas" },
+          { key: "Solicitar Grade de Conteúdo", icon: "📄", label: "Solicitar Grade de Conteúdo" },
+          { key: "Inscrever-se em Disciplinas", icon: "✅", label: "Inscrever-se em Disciplinas" },
+          { key: "Professor", icon: "👨‍🏫", label: "Professor", color: "#6c63ff" },
+          { key: "Cadastrar Notas", icon: "📝", label: "Cadastrar Notas" },
+          { key: "Sistema de Pagamento", icon: "💻", label: "Sistema de Pagamento", color: "#6c63ff" }
+        ],
+        [
+          { from: "Aluno", to: "Comprar Bilhete de Estacionamento" },
+          { from: "Aluno", to: "Obter Cronograma de Disciplinas" },
+          { from: "Aluno", to: "Solicitar Grade de Conteúdo" },
+          { from: "Aluno", to: "Inscrever-se em Disciplinas" },
+          { from: "Comprar Bilhete de Estacionamento", to: "Pagamento com Cartão de Crédito" },
+          { from: "Comprar Bilhete de Estacionamento", to: "Pagamento com Boleto" },
+          { from: "Professor", to: "Cadastrar Notas" },
+          { from: "Sistema de Pagamento", to: "Comprar Bilhete de Estacionamento" }
+        ]
+      );
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
